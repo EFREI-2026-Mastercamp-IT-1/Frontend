@@ -3,7 +3,26 @@
 {
 	"name": "Node.js & TypeScript",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-22"
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-22",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"antfu.vite",
+				"vitest.explorer",
+				"yoavbls.pretty-ts-errors",
+				"usernamehw.errorlens",
+				"PWABuilder.pwa-studio",
+				"GitHub.copilot",
+				"GitHub.copilot-chat",
+				"GitHub.vscode-pull-request-github",
+				"eamodio.gitlens",
+				"VisualStudioExptTeam.vscodeintellicode",
+				"yzhang.markdown-all-in-one",
+				"christian-kohler.npm-intellisense",
+				"hbenl.vscode-test-explorer",
+			]
+		}
+	}
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
