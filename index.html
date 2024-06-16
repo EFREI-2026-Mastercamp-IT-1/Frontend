@@ -10,25 +10,75 @@
             margin: 0;
             padding: 0;
             height: 100%;
+            display: flex;
+        }
+        #sidebar {
+            width: 6vw;
+            height: 100vh;
+            overflow: auto;
+            background: #f4f4f4;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centre les images */
+        }
+        #sidebar img {
+            width: 50px; /* Taille réduite des icônes */
+            cursor: pointer; /* Style de curseur pour indiquer qu'elles sont cliquables */
+            margin-bottom: 10px; /* Espace entre les icônes */
         }
         #map {
-            height: 100vh;
-            width: 100vw;
+            height: 90vh;
+            width: 90vw;
         }
+
+        .cont2{
+            display: flex;
+            flex-direction: column;
+        }
+        h1{
+            text-align: center;
+        }
+
+
     </style>
 </head>
 <body>
-<div id="map"></div>
+<div id="sidebar">
+    <img src="svg/ligne1.svg" onclick="fetchStops('ligne1', '#FFBE00')">
+    <img src="svg/ligne2.svg" onclick="fetchStops('ligne2', '#0055C8')">
+    <img src="svg/ligne3.svg" onclick="fetchStops('ligne3', '#6E6E00')">
+    <img src="svg/ligne3bis.svg" onclick="fetchStops('ligne3b', '#6EC4E8')">
+    <img src="svg/ligne4.svg" onclick="fetchStops('ligne4', '#A0006E')">
+    <img src="svg/ligne5.svg" onclick="fetchStops('ligne5', '#FF7E2E')">
+    <img src="svg/ligne6.svg" onclick="fetchStops('ligne6', '#6ECA97')">
+    <img src="svg/ligne7.svg" onclick="fetchLigne7()">
+    <img src="svg/ligne7bis.svg" onclick="fetchStops('ligne7b', '#6ECA97')">
+    <img src="svg/ligne8.svg" onclick="fetchStops('ligne8', '#D282BE')">
+    <img src="svg/ligne9.svg" onclick="fetchStops('ligne9', '#B6BD00')">
+    <img src="svg/ligne10.svg" onclick="fetchStops('ligne10', '#C9910D')">
+    <img src="svg/ligne11.svg" onclick="fetchStops('ligne11', '#704B1C')">
+    <img src="svg/ligne12.svg" onclick="fetchStops('ligne12', '#007852')">
+    <img src="svg/ligne13.svg" onclick="fetchStops('ligne13', '#6EC4E8')">
+    <img src="svg/ligne14.svg" onclick="fetchStops('ligne14', '#62259D')">
+
+</div>
+<div class="cont2">
+    <div id="map"></div><br>
+    <button onclick="displayAll()">Afficher Tout</button><br>
+    <h1>RouteSync</h1>
+</div>
+
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
-    var map = L.map('map').setView([48.8566, 2.3522], 12); // Centre sur Paris
-
+    var map = L.map('map').setView([48.8566, 2.3522], 12);
     L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
         maxZoom: 19,
-        attribution: '© OpenStreetMap contributors'
+        attribution: 'Réalisé pour EFREI'
     }).addTo(map);
 
     async function fetchStops(line, color) {
+        clearMap();
         const response = await fetch(`http://localhost:8000/stops/${line}`);
         const stops = await response.json();
         const latLngs = [];
@@ -49,23 +99,40 @@
         map.fitBounds(L.polyline(latLngs).getBounds());
     }
 
-    fetchStops('ligne5', '#FF7E2E');
-    fetchStops('ligne7', '#F49FB3');
-    fetchStops('ligne1', '#FFBE00');
-    fetchStops('ligne2', '#0055C8');
-    fetchStops('ligne6', '#6ECA97');
-    fetchStops('ligne3', '#6E6E00');
-    fetchStops('ligne4', '#A0006E');
-    fetchStops('ligne9', '#B6BD00');
-    fetchStops('ligne8', '#D282BE');
-    fetchStops('ligne13', '#6EC4E8');
-    fetchStops('ligne14', '#62259D');
-    fetchStops('ligne7_2', '#F49FB3');
-    fetchStops('ligne11', '#704B1C');
-    fetchStops('ligne12', '#007852');
-    fetchStops('ligne7b', '#6ECA97');
-    fetchStops('ligne3b', '#6EC4E8');
-    fetchStops('ligne10', '#C9910D');
+    function fetchLigne7() {
+        clearMap();
+        fetchStops('ligne7', '#F49FB3');
+        fetchStops('ligne7_2', '#F49FB3');
+    }
+
+    function displayAll() {
+        clearMap();
+        fetchStops('ligne5', '#FF7E2E');
+        fetchStops('ligne7', '#F49FB3');
+        fetchStops('ligne1', '#FFBE00');
+        fetchStops('ligne2', '#0055C8');
+        fetchStops('ligne6', '#6ECA97');
+        fetchStops('ligne3', '#6E6E00');
+        fetchStops('ligne4', '#A0006E');
+        fetchStops('ligne9', '#B6BD00');
+        fetchStops('ligne8', '#D282BE');
+        fetchStops('ligne13', '#6EC4E8');
+        fetchStops('ligne14', '#62259D');
+        fetchStops('ligne7_2', '#F49FB3');
+        fetchStops('ligne11', '#704B1C');
+        fetchStops('ligne12', '#007852');
+        fetchStops('ligne7b', '#6ECA97');
+        fetchStops('ligne3b', '#6EC4E8');
+        fetchStops('ligne10', '#C9910D');
+    }
+
+    function clearMap() {
+        map.eachLayer(function(layer) {
+            if (layer instanceof L.Circle || layer instanceof L.Polyline) {
+                map.removeLayer(layer);
+            }
+        });
+    }
 </script>
 </body>
 </html>
