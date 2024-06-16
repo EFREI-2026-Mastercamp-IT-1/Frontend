@@ -1,47 +1,49 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from typing import List
-import sqlite3
-from starlette.middleware.cors import CORSMiddleware
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carte des arrêts de métro</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map { height: 600px; width: 800px; }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    var map = L.map('map').setView([48.8566, 2.3522], 12); // Centre sur Paris
 
-app = FastAPI()
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
 
-class Stop(BaseModel):
-    stop_id: str
-    stop_sequence: int
-    lon: float
-    lat: float
+    // Définis une icône personnalisée plus petite
+    var smallIcon = L.icon({
+        iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-red.png',
+        iconSize: [20, 20], // taille de l'icône
+        iconAnchor: [10, 10] // point de l'icône qui correspond à la position du marqueur
+    });
 
-def get_db_connection():
-    conn = sqlite3.connect('mon_database.db')
-    conn.row_factory = sqlite3.Row
-    return conn
+    async function fetchStops() {
+        const response = await fetch('http://localhost:8000/stops'); // Remplace par l'URL de ton API
+        const stops = await response.json();
+        const latLngs = [];
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://localhost:8000",
-        "http://localhost:63342"
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+        stops.forEach(stop => {
+            const marker = L.marker([stop.lat, stop.lon], {icon: smallIcon}).addTo(map);
+            marker.bindPopup(`Arrêt: ${stop.stop_id}`);
+            latLngs.push([stop.lat, stop.lon]);
+        });
 
-@app.get("/stops", response_model=List[Stop])
-def read_stops():
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM ligne5 ORDER BY stop_sequence")
-    stops = cursor.fetchall()
-    return [Stop(**dict(stop)) for stop in stops]
+        // Dessine une ligne orange entre les arrêts
+        const polyline = L.polyline(latLngs, {color: 'orange'}).addTo(map);
+        map.fitBounds(polyline.getBounds());
+    }
 
-@app.get("/stop/{stop_id}", response_model=Stop)
-def read_stop(stop_id: str):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM ligne5 WHERE stop_id = ?", (stop_id,))
-    stop = cursor.fetchone()
-    if stop is None:
-        raise HTTPException(status_code=404, detail="Stop not found")
-    return Stop(**dict(stop))
+    fetchStops();
+</script>
+</body>
+</html>
