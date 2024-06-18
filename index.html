@@ -26,9 +26,12 @@
             width: 600px;
             height: 100vh;
             margin: 0 auto; /* Centrer le layout horizontalement */
+            scrollbar-width: none; /* Pour Firefox */
         }
 
-
+        .custom-layout::-webkit-scrollbar {
+            display: none; /* Pour Chrome, Safari, et autres navigateurs WebKit/Blink */
+        }
 
     </style>
 </head>
