@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carte des arrêts de métro</title>
+    <title>RounteSync API</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="index.css">
     <style>
@@ -22,7 +22,6 @@
 
 
 
-
         .custom-layout {
             width: 600px;
             height: 100vh;
@@ -35,7 +34,7 @@
 </head>
 <body>
 <div class="flex">
-    <div class="custom-layout font-sans font-bold ">
+    <div class="custom-layout font-sans font-bold overflow-y-auto">
         <div class="w-full h-[322px] bg-routesyncgreen pt-6 relative">
         <h1 class="text-2xl mb-8 text-white pl-12 flex items-center">
         Route<em>Sync</em>
@@ -69,6 +68,12 @@
         </button>
     </div>
     <div>
+        <div class="divider divider-success mt-4 pt-7 mb-10">Administration</div>
+        <div class="flex flex-col space-y-4">
+            <button class="btn btn-active mx-32" onclick="displayAll()">Réinitialiser la carte</button>
+            <button class="btn btn-active mx-32">Vérifier connexité</button>
+            <button class="btn btn-active mx-32">Afficher l'ACPM</button>
+        </div>
 
         <div class="divider divider-success mt-4 pt-7 mb-10">Métro</div>
         <div class="grid grid-cols-4 gap-4 px-10">
