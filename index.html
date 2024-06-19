@@ -15,7 +15,6 @@
 .dark-mode .leaflet-control-attribution {
     filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
 }
-        /* Pour les champs de formulaire */
         input:-webkit-autofill,
         textarea:-webkit-autofill,
         select:-webkit-autofill {
@@ -23,20 +22,19 @@
             -webkit-text-fill-color: #000 !important;
         }
 
-        /* Pour désactiver le contour de focus si nécessaire */
         input:-webkit-autofill:focus, textarea:-webkit-autofill:focus, select:-webkit-autofill:focus {
             outline: none !important;
         }
 
 
         .dark-mode .form-input {
-            background-color: transparent; /* Couleur de fond plus sombre */
-            color: white; /* Texte blanc */
-            border-color: #555; /* Bordure plus sombre */
+            background-color: transparent;
+            color: white;
+            border-color: #555;
         }
 
         .dark-mode .flex.flex-col {
-            background-color: #282a36; /* Arrière-plan plus sombre pour le conteneur */
+            background-color: #282a36;
         }
         .dark-mode .form-input::placeholder {
             background-color: transparent;
@@ -49,19 +47,19 @@
 
 
         #itineraireSection {
-            display: none; /* Masque la section itinéraire par défaut */
+            display: none;
         }
 
         .custom-layout {
             width: 600px;
             height: 100vh;
-            margin: 0 auto; /* Centrer le layout horizontalement */
-            scrollbar-width: none; /* Pour Firefox */
+            margin: 0 auto;
+            scrollbar-width: none;
 
         }
 
         .custom-layout::-webkit-scrollbar {
-            display: none; /* Pour Chrome, Safari, et autres navigateurs WebKit/Blink */
+            display: none;
         }
 
     </style>
@@ -81,12 +79,6 @@
                     </label>
                 </h1>
 
-        <!--    <div class="flex flex-col">
-                <input type="text" placeholder="Départ"
-                       class="input  input-bordered w-full max-w-xs rounded-md mb-5 mx-auto block opacity-40 focus:opacity-100"/>
-                <input type="text" placeholder="Destination"
-                       class="input input-bordered w-full  max-w-xs rounded-md mx-auto block opacity-40 focus:opacity-100"/>
-            </div>-->
 
             <form id="searchForm" class="flex flex-col p-4 bg-white rounded-md shadow-lg w-80 mx-auto">
                 <div class="flex items-center mb-1">
@@ -128,15 +120,12 @@
                     </div>
                 </div>
                 <div class="bg-white mt-6 p-2 border-2 border-green-500 rounded-full flex items-center space-x-2">
-                    <img src="leaf.png" alt="Feuille" class="h-5 w-5">
-                    <span class="text-green-500 text-sm">CO2 émis pour cet itinéraire : 0.01 kg</span>
-                </div>
-                <div class="bg-white mt-6 p-2 border-2 border-green-500 rounded-full flex items-center space-x-2">
                     <img src="leaf2.png" alt="Feuille" class="h-5 w-5">
                     <span class="text-green-500 text-sm">CO2 émis pour cet itinéraire : 0.01 kg</span>
                 </div>
-                <div class="divider mx-8"></div>
+
             </div>
+            <div class="divider mx-8"></div>
         </div>
 
 
@@ -176,7 +165,7 @@
                 <img src='svg/ligne6.svg' onclick="fetchStops('ligne6', '#6ECA97')" alt="SVG Description" class="svg-icon"/>
             </div>
             <div class="p-2 border-4 rounded-lg flex items-center justify-center">
-                <img src='svg/ligne7.svg' onclick="fetchStops('ligne7_2', '#F49FB3')" alt="SVG Description" class="svg-icon"/>
+                <img src='svg/ligne7.svg' onclick="fetchLigne7()" alt="SVG Description" class="svg-icon"/>
             </div>
             <div class="p-2 border-4 rounded-lg flex items-center justify-center">
                 <img src='svg/ligne7bis.svg' onclick="fetchStops('ligne7b', '#6ECA97')" alt="SVG Description" class="svg-icon"/>
@@ -218,18 +207,13 @@
 
 
 
-
-    // Sélectionnez les champs d'entrée
     const inputs = document.querySelectorAll('.input');
 
-    // Ajoutez un écouteur d'événements à chaque champ d'entrée
     inputs.forEach(input => {
         input.addEventListener('input', () => {
-            // Si le champ d'entrée n'est pas vide, définissez l'opacité à 70
             if (input.value.trim() !== '') {
                 input.style.opacity = '0.7';
             }
-            // Sinon, rétablissez l'opacité à 20
             else {
                 input.style.opacity = '0.2';
             }
@@ -312,13 +296,11 @@
     displayAll()
 
     document.getElementById('searchForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Empêche le rechargement de la page
+        event.preventDefault();
 
-        // Obtenir les valeurs des champs de formulaire
         var depart = document.getElementsByName('depart')[0].value;
         var destination = document.getElementsByName('destination')[0].value;
 
-        // Mettre à jour et afficher la section itinéraire
         document.getElementById('startPoint').textContent = depart;
         document.getElementById('endPoint').textContent = destination;
         document.getElementById('itineraireSection').style.display = 'block'; // Rend la section visible
