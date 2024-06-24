@@ -112,23 +112,22 @@
         <div id="itineraireSection">
             <h1 class="ml-12 mt-8 mb-5">Itinéraire</h1>
             <div class="mx-12 bg-white rounded flex flex-col items-start overflow-auto">
-
                 <div class="relative">
                     <div class="absolute left-[0.29rem] top-[0.9rem] bottom-[0.9rem] w-0.5 bg-green-700"></div>
-                    <div class="flex items-center mb-4">
-                        <div class="h-3 w-3 rounded-full bg-green-700"></div>
-                        <div class="ml-4 text-lg font-semibold" id="startPoint">Bastille</div>
-                    </div>
                     <div class="flex items-center">
                         <div class="h-3 w-3 rounded-full bg-green-700"></div>
-                        <div class="ml-4 text-lg font-semibold" id="endPoint">Gare de Lyon</div>
+                        <div class="ml-4 text-lg font-semibold" id="startPoint">Départ</div>
+                    </div>
+                    <!-- Liste pour afficher les noms des stations de l'itinéraire -->
+                    <ul id="stationList" class="list-disc ml-8 my-2"></ul>
+                    <div class="flex items-center">
+                        <div class="h-3 w-3 rounded-full bg-green-700"></div>
+                        <div class="ml-4 text-lg font-semibold" id="endPoint">Arrivée</div>
                     </div>
                 </div>
                 <div class="bg-white mt-6 p-2 border-2 border-green-500 rounded-full flex items-center space-x-2">
-<!--                    <img src="leaf2.png" alt="Feuille" class="h-5 w-5">-->
                     <span class="text-green-500 text-sm">CO2 émis pour cet itinéraire : 0.01 kg</span>
                 </div>
-
             </div>
             <div class="divider mx-8"></div>
         </div>
@@ -136,7 +135,10 @@
 
 
 
-    <div>
+
+
+
+        <div>
         <h1 class="ml-12 mt-8 mb-5">Administration de la carte</h1>
         <div class="flex space-x-2 justify-center">
             <button class="px-3 py-2 text-xs bg-white border border-gray-400 text-black rounded-full hover:border-green-500 hover:text-green-900" onclick="displayAll()">Réinitialiser la carte</button>
@@ -146,7 +148,10 @@
 
 
         <div class="divider mx-8"></div>
-        <h1 class="ml-12 mt-5 mb-5">Métro</h1>
+        <h1 class="ml-12 mt-5 mb-5 flex items-center">
+            <img src="metro.svg" alt="Icone Metro" class="h-6 w-6 mr-2">
+            Métro
+        </h1>
         <div class="grid grid-cols-4 gap-4 px-10">
             <div class="p-2 border-4 rounded-lg flex items-center justify-center">
                 <img src='svg/ligne1.svg' onclick="fetchStops('ligne1', '#FFBE00')" alt="SVG Description" class="svg-icon"/>
@@ -239,8 +244,8 @@
         pointsData.forEach(point => {
             // Créez un cercle sur la carte à la position lat/lon du point
             const circle = L.circle([point.lat, point.lon], {
-                color: '#ff7800',
-                fillColor: '#ff7800',
+                color: '#209474',
+                fillColor: '#209474',
                 fillOpacity: 1,
                 radius: 50
             }).addTo(map);
@@ -273,7 +278,7 @@
             // Vérifiez que point1 et point2 ne sont pas undefined avant de créer une ligne
             if (point1 && point2) {
                 // Créez une ligne entre ces deux points sur la carte
-                L.polyline([[point1.lat, point1.lon], [point2.lat, point2.lon]], {color: 'red'}).addTo(map);
+                L.polyline([[point1.lat, point1.lon], [point2.lat, point2.lon]], {color: '#209474'}).addTo(map);
             }
         });
     }
@@ -386,7 +391,7 @@
     }
     displayAll()
 
-    document.getElementById('searchForm').addEventListener('submit', function(event) {
+    /*document.getElementById('searchForm').addEventListener('submit', function(event) {
         event.preventDefault();
 
         var depart = document.getElementsByName('depart')[0].value;
@@ -395,9 +400,176 @@
         document.getElementById('startPoint').textContent = depart;
         document.getElementById('endPoint').textContent = destination;
         document.getElementById('itineraireSection').style.display = 'block'; // Rend la section visible
+    });*/
+
+
+
+    // Définition des couleurs par ligne
+    const lineColors = {
+        'ligne1': '#FFBE00',
+        'ligne2': '#0055C8',
+        'ligne3': '#6E6E00',
+        'ligne4': '#A0006E',
+        'ligne5': '#FF7E2E',
+        'ligne6': '#6ECA97',
+        'ligne7': '#F49FB3',
+        'ligne8': '#D282BE',
+        'ligne9': '#B6BD00',
+        'ligne10': '#C9910D',
+        'ligne11': '#704B1C',
+        'ligne12': '#007852',
+        'ligne13': '#6EC4E8',
+        'ligne14': '#62259D',
+        'ligne7_2': '#F49FB3',
+        'ligne7b': '#6ECA97',
+        'ligne3b': '#6EC4E8'
+    };
+
+    document.getElementById('searchForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        document.getElementById('stationList').innerHTML = '';
+        var depart = document.getElementsByName('depart')[0].value;
+        var destination = document.getElementsByName('destination')[0].value;
+
+        document.getElementById('startPoint').textContent = "Départ";
+        document.getElementById('endPoint').textContent = "Arrivée";
+        document.getElementById('itineraireSection').style.display = 'block'; // Rend la section visible
+
+        clearMap(); // Efface la carte avant de dessiner un nouvel itinéraire
+
+        const lineColors = {
+            'ligne1': '#FFBE00',
+            'ligne2': '#0055C8',
+            'ligne3': '#6E6E00',
+            'ligne4': '#A0006E',
+            'ligne5': '#FF7E2E',
+            'ligne6': '#6ECA97',
+            'ligne7': '#F49FB3',
+            'ligne8': '#D282BE',
+            'ligne9': '#B6BD00',
+            'ligne10': '#C9910D',
+            'ligne11': '#704B1C',
+            'ligne12': '#007852',
+            'ligne13': '#6EC4E8',
+            'ligne14': '#62259D',
+            'ligne7_2': '#F49FB4',
+            'ligne7b': '#6ECA98',
+            'ligne3b': '#6EC4E9'
+        };
+        const lineNames = {
+            '#FFBE00': 'ligne1',
+            '#0055C8': 'ligne2',
+            '#6E6E00': 'ligne3',
+            '#A0006E': 'ligne4',
+            '#FF7E2E': 'ligne5',
+            '#6ECA97': 'ligne6',
+            '#F49FB3': 'ligne7',
+            '#D282BE': 'ligne8',
+            '#B6BD00': 'ligne9',
+            '#C9910D': 'ligne10',
+            '#704B1C': 'ligne11',
+            '#007852': 'ligne12',
+            '#6EC4E8': 'ligne13',
+            '#62259D': 'ligne14',
+            '#F49FB4': 'ligne7',
+            '#6ECA98': 'ligne7bis',
+            '#6EC4E8': 'ligne3bis'
+        };
+
+        let stations = await fetch('http://127.0.0.1:8000/stations/').then(response => response.json());
+
+        let startStation = stations.find(station => station.stop_name === depart);
+        let endStation = stations.find(station => station.stop_name === destination);
+        const pathData = await fetch(`http://127.0.0.1:8000/dijkstra/${startStation.id}/${endStation.id}`).then(response => response.json());
+        const path = pathData.path;
+
+        let pathCoordinates = [];
+        let prevIcon = null; // Variable pour stocker l'icône de la station précédente
+
+        path.forEach((id, index) => {
+            let station = stations.find(s => s.id === id);
+            let nextStation = stations.find(s => s.id === path[index + 1]);
+
+            if (station) {
+                L.circle([station.lat, station.lon], {
+                    color: 'black',
+                    fillColor: 'white',
+                    fillOpacity: 1,
+                    radius: 50,
+                    weight: 6,
+                    pane: 'markerPane'
+                }).addTo(map);
+
+                let listItem = document.createElement('li');
+                let icon = document.createElement('img'); // Créez toujours un nouvel élément img
+
+                if (nextStation) {
+                    let lineColor = lineColors[nextStation.line];
+                    if (nextStation && (station.next_stop_id == nextStation.id || station.prev_stop_id == nextStation.id)) {
+                        lineColor = lineColors[station.line];
+                    }
+                    let lineName = lineNames[lineColor];
+
+                    icon.src = `svg/${lineName}.svg`;
+                    icon.alt = lineName;
+                    icon.style.height = '20px';
+                    icon.style.width = '20px';
+                    icon.style.verticalAlign = 'bottom';
+                    icon.style.float = 'right';
+                    icon.style.marginLeft = '30px';
+
+                    listItem.appendChild(document.createTextNode(`${station.stop_name} `));
+                    listItem.appendChild(icon);
+
+                    prevIcon = icon.cloneNode(true); // Sauvegardez l'icône de cette itération pour l'utiliser plus tard si nécessaire
+                } else if (prevIcon) { // Utiliser l'icône de la station précédente si pas de station suivante
+                    listItem.appendChild(document.createTextNode(`${station.stop_name} `));
+                    listItem.appendChild(prevIcon);
+                } else {
+                    listItem.textContent = `${station.stop_name} (Pas de station suivante)`;
+                }
+                stationList.appendChild(listItem);
+            }
+
+            if (station && index < path.length - 1) {
+                let lineColor = lineColors[nextStation.line];
+                if (nextStation && (station.next_stop_id == nextStation.id || station.prev_stop_id == nextStation.id)) {
+                    lineColor = lineColors[station.line];
+                }
+
+                pathCoordinates.push([station.lat, station.lon]);
+                if (nextStation) {
+                    L.polyline([[station.lat, station.lon], [nextStation.lat, nextStation.lon]], {
+                        color: lineColor,
+                        weight: 6
+                    }).addTo(map);
+                }
+            }
+        });
+
+
+
+        if (path.length > 0) {
+            let lastStation = stations.find(s => s.id === path[path.length - 1]);
+            if (lastStation) {
+                L.circle([lastStation.lat, lastStation.lon], {
+                    color: '#000000', // contour noir
+                    fillColor: '#ffffff', // remplissage blanc
+                    fillOpacity: 1,
+                    radius: 50,
+                    weight: 6// ajustez la taille ici
+                }).addTo(map);
+            }
+        }
+
+        if (pathCoordinates.length > 0) {
+            map.fitBounds(pathCoordinates);
+        }
     });
 
 
+    // Appeler la fonction après la boucle forEach
+    addIconsToStartAndEndPoints(firstIcon, lastIcon);
 
 
 </script>
