@@ -491,7 +491,7 @@
             let nextStation = stations.find(s => s.id === path[index + 1]);
 
             if (station) {
-                L.circle([station.lat, station.lon], {
+                const circle = L.circle([station.lat, station.lon], {
                     color: 'black',
                     fillColor: 'white',
                     fillOpacity: 1,
@@ -499,7 +499,9 @@
                     weight: 6,
                     pane: 'markerPane'
                 }).addTo(map);
+                circle.bindTooltip(station.stop_name);
 
+                circle.bindPopup(`Arrêt: ${station.stop_name}`);
                 let listItem = document.createElement('li');
                 let icon = document.createElement('img'); // Créez toujours un nouvel élément img
 
