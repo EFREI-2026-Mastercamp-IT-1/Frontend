@@ -207,7 +207,7 @@
     </div><br>
 
 </div>
-<div role="alert" class="alert alert-success absolute bottom-3 left-[41.2vw] z-[1000] w-full max-w-lg text-white hidden transition opacity-0 duration-5">
+<div role="alert" class="alert alert-success absolute bottom-3 left-[41.2vw] z-[1000] w-full max-w-lg text-white hidden opacity-0 transition-opacity duration-500">
     <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
     <span>Le réseau est connexe !</span>
 </div>
@@ -281,9 +281,11 @@
         // Sélectionnez la div
         var alertDiv = document.querySelector('.alert');
 
-        // Affichez la div
-        alertDiv.classList.remove('opacity-0');
+        // Affichez la div avec un effet de fondu
         alertDiv.classList.remove('hidden');
+        setTimeout(function() {
+            alertDiv.classList.remove('opacity-0');
+        }, 10); // un petit délai pour s'assurer que 'hidden' est supprimé avant de commencer la transition
 
         // Faites disparaître la div après 3 secondes
         setTimeout(function() {
