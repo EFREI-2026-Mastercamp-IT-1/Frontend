@@ -108,6 +108,7 @@
     </div>
 
 
+
         <div id="itineraireSection">
             <h1 class="ml-12 mt-8 mb-5">Itinéraire</h1>
             <div class="mx-12 bg-white rounded flex flex-col items-start overflow-auto">
@@ -124,7 +125,7 @@
                     </div>
                 </div>
                 <div class="bg-white mt-6 p-2 border-2 border-green-500 rounded-full flex items-center space-x-2">
-                    <img src="leaf2.png" alt="Feuille" class="h-5 w-5">
+<!--                    <img src="leaf2.png" alt="Feuille" class="h-5 w-5">-->
                     <span class="text-green-500 text-sm">CO2 émis pour cet itinéraire : 0.01 kg</span>
                 </div>
 
@@ -139,8 +140,8 @@
         <h1 class="ml-12 mt-8 mb-5">Administration de la carte</h1>
         <div class="flex space-x-2 justify-center">
             <button class="px-3 py-2 text-xs bg-white border border-gray-400 text-black rounded-full hover:border-green-500 hover:text-green-900" onclick="displayAll()">Réinitialiser la carte</button>
-            <button class="px-2 py-1 text-xs bg-white border border-gray-400  text-black rounded-full  hover:border-green-500 hover:text-green-900">Vérifier connexité</button>
-            <button class="px-2 py-1 text-xs bg-white border border-gray-400  text-black rounded-full  hover:border-green-500 hover:text-green-900">Afficher l'ACPM</button>
+            <button class="px-2 py-1 text-xs bg-white border border-gray-400  text-black rounded-full  hover:border-green-500 hover:text-green-900" onclick="displayConnexe()">Vérifier connexité</button>
+            <button class="px-2 py-1 text-xs bg-white border border-gray-400  text-black rounded-full  hover:border-green-500 hover:text-green-900" onclick="fetchACPMPoints()">Afficher l'ACPM</button>
         </div>
 
 
@@ -199,9 +200,17 @@
     </div>
 
 </div>
-    <div id="map"></div><br>
-</div>
 
+    <div id="map" class="relative">
+
+
+    </div><br>
+
+</div>
+<div role="alert" class="alert alert-success absolute bottom-3 left-[41.2vw] z-[1000] w-full max-w-lg text-white hidden transition opacity-0 duration-5">
+    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    <span>Le réseau est connexe !</span>
+</div>
 
 
 
@@ -209,8 +218,83 @@
 <script src="https://kit.fontawesome.com/e22cda2001.js" crossorigin="anonymous"></script>
 <script>
 
+    let pointsData = [];
 
+    async function fetchACPMPoints() {
+        // Effacez toutes les couches de la carte
+        map.eachLayer(function(layer) {
+            if (layer instanceof L.Circle || layer instanceof L.Polyline) {
+                map.removeLayer(layer);
+            }
+        });
 
+        // Récupérez les données de l'endpoint
+        const response = await fetch('http://127.0.0.1:8000/acpm/points');
+        pointsData = await response.json();
+
+        // Créez un tableau pour stocker les coordonnées de tous les points
+        let latLngs = [];
+
+        // Parcourez chaque point
+        pointsData.forEach(point => {
+            // Créez un cercle sur la carte à la position lat/lon du point
+            const circle = L.circle([point.lat, point.lon], {
+                color: '#ff7800',
+                fillColor: '#ff7800',
+                fillOpacity: 1,
+                radius: 50
+            }).addTo(map);
+
+            // Ajoutez un tooltip au cercle avec le nom de l'arrêt
+            circle.bindTooltip(point.stop_name, {direction: 'right'});
+
+            // Ajoutez les coordonnées du point au tableau
+            latLngs.push([point.lat, point.lon]);
+        });
+
+        // Appelez fetchACPMConnections et attendez qu'il soit terminé
+        await fetchACPMConnections();
+
+        // Ajustez la vue de la carte pour englober tous les points
+        map.fitBounds(latLngs);
+    }
+
+    async function fetchACPMConnections() {
+        // Récupérez les données de l'endpoint
+        const response = await fetch('http://127.0.0.1:8000/acpm');
+        const connections = await response.json();
+
+        // Parcourez chaque connexion
+        connections.forEach(connection => {
+            // Trouvez les deux points correspondants dans les données précédemment récupérées
+            const point1 = pointsData.find(point => point.stop_id === connection[0]);
+            const point2 = pointsData.find(point => point.stop_id === connection[1]);
+
+            // Vérifiez que point1 et point2 ne sont pas undefined avant de créer une ligne
+            if (point1 && point2) {
+                // Créez une ligne entre ces deux points sur la carte
+                L.polyline([[point1.lat, point1.lon], [point2.lat, point2.lon]], {color: 'red'}).addTo(map);
+            }
+        });
+    }
+    function displayConnexe() {
+        // Sélectionnez la div
+        var alertDiv = document.querySelector('.alert');
+
+        // Affichez la div
+        alertDiv.classList.remove('opacity-0');
+        alertDiv.classList.remove('hidden');
+
+        // Faites disparaître la div après 3 secondes
+        setTimeout(function() {
+            alertDiv.classList.add('opacity-0');
+
+            // Ajoutez 'hidden' après la transition
+            setTimeout(function() {
+                alertDiv.classList.add('hidden');
+            }, 500); // correspond à 'duration-500' dans Tailwind
+        }, 3000);
+    }
     const inputs = document.querySelectorAll('.input');
 
     inputs.forEach(input => {
@@ -255,6 +339,7 @@
                 weight: 6
             }).addTo(map);
             circle.bindPopup(`Arrêt: ${stop.stop_name}`);
+            circle.bindTooltip(stop.stop_name, {direction: 'right'});
         });
 
 
