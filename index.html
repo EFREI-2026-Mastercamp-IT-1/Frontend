@@ -63,8 +63,10 @@
         }
 
     </style>
+
 </head>
 <body>
+
 <div class="flex font-sans">
 
     <div class="custom-layout font-sans font-bold overflow-y-auto ">
@@ -489,7 +491,6 @@
         path.forEach((id, index) => {
             let station = stations.find(s => s.id === id);
             let nextStation = stations.find(s => s.id === path[index + 1]);
-
             if (station) {
                 const circle = L.circle([station.lat, station.lon], {
                     color: 'black',
@@ -523,7 +524,9 @@
                     listItem.appendChild(document.createTextNode(`${station.stop_name} `));
                     listItem.appendChild(icon);
 
-                    prevIcon = icon.cloneNode(true); // Sauvegardez l'icône de cette itération pour l'utiliser plus tard si nécessaire
+                    prevIcon = icon.cloneNode(true);
+
+                    // Sauvegardez l'icône de cette itération pour l'utiliser plus tard si nécessaire
                 } else if (prevIcon) { // Utiliser l'icône de la station précédente si pas de station suivante
                     listItem.appendChild(document.createTextNode(`${station.stop_name} `));
                     listItem.appendChild(prevIcon);
@@ -574,6 +577,11 @@
     addIconsToStartAndEndPoints(firstIcon, lastIcon);
 
 
+
+
+
+
 </script>
+
 </body>
 </html>
