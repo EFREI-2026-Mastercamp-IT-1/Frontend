@@ -11,7 +11,9 @@ export default {
         'routesynclightgreen': '#199675',
       },
       fontFamily:{
-        sans: ['Roboto', 'sans-serif'],
+        sans: ['Roboto','"Comic Sans MS"', 'sans-serif'],
+        "ca": ['OpenDyslexic','"Comic Sans MS"', 'sans-serif'],
+
       }
     },
   },
