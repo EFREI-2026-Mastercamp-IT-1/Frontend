@@ -1,7 +1,9 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import Search from './Search.jsx'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import SearchBox from './SearchBox.jsx';
 
-ReactDOM.createRoot(document.getElementById('searchBox')).render(
-    <Search />
-)
+ReactDOM.createRoot(document.getElementById('SearchBox')).render(
+  <React.StrictMode>
+    <SearchBox />
+  </React.StrictMode>
+);

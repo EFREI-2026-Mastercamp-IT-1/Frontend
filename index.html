@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,14 +9,13 @@
     <link rel="stylesheet" href="index.css">
     <link rel="icon" href="icon.png" type="image/x-icon">
     <style>
-
-
         .dark-mode .leaflet-layer,
-.dark-mode .leaflet-control-zoom-in,
-.dark-mode .leaflet-control-zoom-out,
-.dark-mode .leaflet-control-attribution {
-    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
-}
+        .dark-mode .leaflet-control-zoom-in,
+        .dark-mode .leaflet-control-zoom-out,
+        .dark-mode .leaflet-control-attribution {
+            filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+        }
+
         input:-webkit-autofill,
         textarea:-webkit-autofill,
         select:-webkit-autofill {
@@ -23,7 +23,9 @@
             -webkit-text-fill-color: #000 !important;
         }
 
-        input:-webkit-autofill:focus, textarea:-webkit-autofill:focus, select:-webkit-autofill:focus {
+        input:-webkit-autofill:focus,
+        textarea:-webkit-autofill:focus,
+        select:-webkit-autofill:focus {
             outline: none !important;
         }
 
@@ -37,10 +39,12 @@
         .dark-mode .flex.flex-col {
             background-color: #282a36;
         }
+
         .dark-mode .form-input::placeholder {
             background-color: transparent;
             color: white;
         }
+
         #map {
             height: 100vh;
             width: 100vw;
@@ -62,413 +66,390 @@
         .custom-layout::-webkit-scrollbar {
             display: none;
         }
-
-
     </style>
 
 </head>
+
 <body>
 
-<div class="flex">
+    <div class="flex">
 
-    <div class="custom-layout font-sans font-bold overflow-y-auto ">
+        <div class="custom-layout font-sans font-bold overflow-y-auto ">
 
-        <div class="w-full h-[400px] bg-routesyncgreen pt-6 relative">
-                <h1 class="text-2xl mb-8 text-white flex items-center ml-[3.5vw]"><span class="font-light">Route</span><em>Sync</em>
-<!--                    <span class="ml-5 px-3 py-1 text-xs bg-white text-black rounded-full">Paris</span>-->
-                    <i onclick="my_modal_1.showModal()" id="accessibilityIcon" class="fas fa-universal-access ml-3 cursor-pointer"></i>
-
+            <div class="w-full h-[400px] bg-routesyncgreen pt-6 relative">
+                <h1 class="text-2xl mb-8 text-white flex items-center ml-[3.5vw]">
+                    <span class="font-light">
+                        Route
+                    </span>
+                    <em>
+                        Sync
+                    </em>
+                    <i onclick="my_modal_1.showModal()" id="accessibilityIcon"
+                        class="fas fa-universal-access ml-3 cursor-pointer"></i>
                     <dialog id="my_modal_1" class="modal">
                         <div class="modal-box">
-                            <h1 class="text-black mb-5">Police (dyslexie)</h1>
+                            <h1 class="text-black mb-5">
+                                Police (dyslexie)
+                            </h1>
                             <input type="checkbox" id="toggleFont" class="toggle" />
                         </div>
                     </dialog>
 
                     <label class="swap swap-rotate ml-24">
                         <input type="checkbox" class="theme-controller" value="dracula" />
-                        <svg class="swap-off fill-current w-10 h-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z"/></svg>
-                        <svg class="swap-on fill-current w-10 h-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z"/></svg>
+                        <svg class="swap-off fill-current w-10 h-10" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24">
+                            <path
+                                d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
+                        </svg>
+                        <svg class="swap-on fill-current w-10 h-10" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24">
+                            <path
+                                d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
+                        </svg>
                     </label>
-
-
-
                 </h1>
 
+                <div id="SearchBox"></div>
+                <script type="module" src="/src/main.jsx"></script>
 
-            <form id="searchForm" class="flex flex-col p-4 bg-white rounded-md shadow-lg w-80 mx-auto">
-    <div class="flex items-center mb-1">
-        <div class="bg-blue-400 rounded-full h-4 w-4 flex-shrink-0"></div>
-        <input type="text" name="depart" placeholder="Départ" class="bg-transparent form-input ml-2 flex-1 text-gray-600 focus:outline-none"/>
-    </div>
-    <div class="h-px bg-gray-300 mx-6 my-2"></div>
-    <div class="flex items-center mt-1">
-        <div class="bg-[#199675] rounded-full h-4 w-4 flex-shrink-0"></div>
-        <input type="text" name="destination" placeholder="Destination" class="bg-transparent form-input ml-2 flex-1 text-gray-600 focus:outline-none"/>
-    </div>
-    <div class="flex items-center mt-8">
-        <select name="timeOption" class="bg-transparent form-select ml-2 flex-1 text-gray-600 focus:outline-none">
-            <option value="departure">Heure de départ</option>
-            <option value="arrival">Heure d'arrivée</option>
-        </select>
-    </div>
-    <div class="flex items-center mt-1">
-        <input type="time" name="time" class="bg-transparent form-input ml-2 flex-1 text-gray-600 focus:outline-none"/>
-    </div>
-    <button
-            class="btn btn-block rounded-md mt-8 bg-[#199675] w-full max-w-xs border-transparent text-white mx-auto block text-md font-medium hover:bg-[#16a085] hover:border-transparent" type="submit">Rechercher
-    </button>
-</form>
+
+                <div class="fixed right-4 top-16 transform translate-y-1/2">
+
+                </div>
+
+            </div>
 
 
 
-            <div class="fixed right-4 top-16 transform translate-y-1/2">
+            <div id="itineraireSection">
+                <h1 class="ml-12 mt-8 mb-5">Itinéraire</h1>
+                <!-- Déplacez cette ligne ici -->
+
+                <img id="speakButton" src="volume.png" alt="Icone Metro"
+                    class="h-8 w-8 ml-12 border-green-600 hover:bg-[#16a085] border rounded-md bg-[#199675]">
+                <div class="mx-12 bg-white rounded flex flex-col items-start overflow-auto">
+                    <div class="relative">
+                        <div class="absolute left-[0.29rem] top-[0.9rem] bottom-[0.9rem] w-0.5 bg-green-700"></div>
+                        <div class="flex items-center">
+                            <div class="h-3 w-3 rounded-full bg-green-700"></div>
+                            <div class="ml-4 text-lg font-semibold" id="startPoint">Départ</div>
+                        </div>
+                        <!-- Liste pour afficher les noms des stations de l'itinéraire -->
+                        <ul id="stationList" class="list-disc ml-8 my-2"></ul>
+                        <div class="flex items-center">
+                            <div class="h-3 w-3 rounded-full bg-green-700"></div>
+                            <div class="ml-4 text-lg font-semibold" id="endPoint">Arrivée</div>
+                        </div>
+                    </div>
+                    <img src="alerte.jpg" alt="Icone CO2" class="h-auto w-auto mt-4">
+                    <div class="bg-white mt-6 p-2 border-2 border-green-500 rounded-full flex items-center space-x-2">
+                        <span class="text-green-500 text-sm">CO2 émis pour cet itinéraire : 0.01 kg</span>
+                    </div>
+
+                </div>
+                <div class="flex justify-center border-2" id="travelTime"></div>
+                <div class="divider mx-8"></div>
+            </div>
+
+
+
+
+
+
+
+            <div>
+                <h1 class="ml-12 mt-8 mb-5">Administration de la carte</h1>
+                <div class="flex space-x-2 justify-center">
+                    <button
+                        class="px-3 py-2 text-xs bg-white border border-gray-400 text-black rounded-full hover:border-green-500 hover:text-green-900"
+                        onclick="displayAll()">Réinitialiser la carte</button>
+                    <button
+                        class="px-2 py-1 text-xs bg-white border border-gray-400  text-black rounded-full  hover:border-green-500 hover:text-green-900"
+                        onclick="displayConnexe()">Vérifier connexité</button>
+                    <button
+                        class="px-2 py-1 text-xs bg-white border border-gray-400  text-black rounded-full  hover:border-green-500 hover:text-green-900"
+                        onclick="fetchACPMPoints()">Afficher l'ACPM</button>
+                </div>
+
+
+                <div class="divider mx-8"></div>
+                <h1 class="ml-12 mt-5 mb-5 flex items-center">
+                    <img src="metro.svg" alt="Icone Metro" class="h-6 w-6 mr-2">
+                    Métro
+                </h1>
+                <div class="grid grid-cols-4 gap-4 px-10">
+                    <div class="p-2 border-4 rounded-lg flex items-center justify-center">
+                        <img src='svg/ligne1.svg' onclick="fetchStops('ligne1', '#FFBE00')" alt="SVG Description"
+                            class="svg-icon" />
+                    </div>
+                    <div class="p-2 border-4 rounded-lg flex items-center justify-center">
+                        <img src='svg/ligne2.svg' onclick="fetchStops('ligne2', '#0055C8')" alt="SVG Description"
+                            class="svg-icon" />
+                    </div>
+                    <div class="p-2 border-4 rounded-lg flex items-center justify-center">
+                        <img src='svg/ligne3.svg' onclick="fetchStops('ligne3', '#6E6E00')" alt="SVG Description"
+                            class="svg-icon" />
+                    </div>
+                    <div class="p-2 border-4 rounded-lg flex items-center justify-center">
+                        <img src='svg/ligne3bis.svg' onclick="fetchStops('ligne3b', '#6EC4E8')" alt="SVG Description"
+                            class="svg-icon" />
+                    </div>
+                    <div class="p-2 border-4 rounded-lg flex items-center justify-center">
+                        <img src='svg/ligne4.svg' onclick="fetchStops('ligne4', '#A0006E')" alt="SVG Description"
+                            class="svg-icon" />
+                    </div>
+                    <div class="p-2 border-4 rounded-lg flex items-center justify-center">
+                        <img src='svg/ligne5.svg' onclick="fetchStops('ligne5', '#FF7E2E')" alt="SVG Description"
+                            class="svg-icon" />
+                    </div>
+                    <div class="p-2 border-4 rounded-lg flex items-center justify-center">
+                        <img src='svg/ligne6.svg' onclick="fetchStops('ligne6', '#6ECA97')" alt="SVG Description"
+                            class="svg-icon" />
+                    </div>
+                    <div class="p-2 border-4 rounded-lg flex items-center justify-center">
+                        <img src='svg/ligne7.svg' onclick="fetchLigne7()" alt="SVG Description" class="svg-icon" />
+                    </div>
+                    <div class="p-2 border-4 rounded-lg flex items-center justify-center">
+                        <img src='svg/ligne7bis.svg' onclick="fetchStops('ligne7b', '#6ECA97')" alt="SVG Description"
+                            class="svg-icon" />
+                    </div>
+                    <div class="p-2 border-4 rounded-lg flex items-center justify-center">
+                        <img src='svg/ligne8.svg' onclick="fetchStops('ligne8', '#D282BE')" alt="SVG Description"
+                            class="svg-icon" />
+                    </div>
+                    <div class="p-2 border-4 rounded-lg flex items-center justify-center">
+                        <img src='svg/ligne9.svg' onclick="fetchStops('ligne9', '#B6BD00')" alt="SVG Description"
+                            class="svg-icon" />
+                    </div>
+                    <div class="p-2 border-4 rounded-lg flex items-center justify-center">
+                        <img src='svg/ligne10.svg' onclick=" fetchStops('ligne10', '#C9910D')" alt="SVG Description"
+                            class="svg-icon" />
+                    </div>
+                    <div class="p-2 border-4 rounded-lg flex items-center justify-center">
+                        <img src='svg/ligne11.svg' onclick="fetchStops('ligne11', '#704B1C')" alt="SVG Description"
+                            class="svg-icon" />
+                    </div>
+                    <div class="p-2 border-4 rounded-lg flex items-center justify-center">
+                        <img src='svg/ligne12.svg' onclick="fetchStops('ligne12', '#007852')" alt="SVG Description"
+                            class="svg-icon" />
+                    </div>
+                    <div class="p-2 border-4 rounded-lg flex items-center justify-center">
+                        <img src='svg/ligne13.svg' onclick="fetchStops('ligne13', '#6EC4E8')" alt="SVG Description"
+                            class="svg-icon" />
+                    </div>
+                    <div class="p-2 border-4 rounded-lg flex items-center justify-center">
+                        <img src='svg/ligne14.svg' onclick="fetchStops('ligne14', '#62259D')" alt="SVG Description"
+                            class="svg-icon" />
+                    </div>
+                </div>
+            </div>
 
         </div>
 
+        <div id="map" class="relative">
+
+
+        </div><br>
+
+    </div>
+    <div role="alert"
+        class="alert alert-success absolute bottom-3 left-[41.2vw] z-[1000] w-full max-w-lg text-white hidden opacity-0 transition-opacity duration-500">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>Le réseau est connexe !</span>
     </div>
 
 
 
-        <div id="itineraireSection">
-    <h1 class="ml-12 mt-8 mb-5">Itinéraire</h1>
-     <!-- Déplacez cette ligne ici -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://kit.fontawesome.com/e22cda2001.js" crossorigin="anonymous"></script>
+    <script>
 
-            <img id="speakButton" src="volume.png" alt="Icone Metro" class="h-8 w-8 ml-12 border-green-600 hover:bg-[#16a085] border rounded-md bg-[#199675]">
-    <div class="mx-12 bg-white rounded flex flex-col items-start overflow-auto">
-        <div class="relative">
-            <div class="absolute left-[0.29rem] top-[0.9rem] bottom-[0.9rem] w-0.5 bg-green-700"></div>
-            <div class="flex items-center">
-                <div class="h-3 w-3 rounded-full bg-green-700"></div>
-                <div class="ml-4 text-lg font-semibold" id="startPoint">Départ</div>
-            </div>
-            <!-- Liste pour afficher les noms des stations de l'itinéraire -->
-            <ul id="stationList" class="list-disc ml-8 my-2"></ul>
-            <div class="flex items-center">
-                <div class="h-3 w-3 rounded-full bg-green-700"></div>
-                <div class="ml-4 text-lg font-semibold" id="endPoint">Arrivée</div>
-            </div>
-        </div>
-        <img src="alerte.jpg" alt="Icone CO2" class="h-auto w-auto mt-4">
-        <div class="bg-white mt-6 p-2 border-2 border-green-500 rounded-full flex items-center space-x-2">
-            <span class="text-green-500 text-sm">CO2 émis pour cet itinéraire : 0.01 kg</span>
-        </div>
+        let pointsData = [];
 
-    </div>
-            <div class="flex justify-center border-2" id="travelTime"></div>
-    <div class="divider mx-8"></div>
-</div>
+        async function fetchACPMPoints() {
+            // Effacez toutes les couches de la carte
+            map.eachLayer(function (layer) {
+                if (layer instanceof L.Circle || layer instanceof L.Polyline) {
+                    map.removeLayer(layer);
+                }
+            });
 
+            // Récupérez les données de l'endpoint
+            const response = await fetch('http://127.0.0.1:8000/acpm/points');
+            pointsData = await response.json();
 
+            // Créez un tableau pour stocker les coordonnées de tous les points
+            let latLngs = [];
 
+            // Parcourez chaque point
+            pointsData.forEach(point => {
+                // Créez un cercle sur la carte à la position lat/lon du point
+                const circle = L.circle([point.lat, point.lon], {
+                    color: '#209474',
+                    fillColor: '#209474',
+                    fillOpacity: 1,
+                    radius: 50
+                }).addTo(map);
 
+                // Ajoutez un tooltip au cercle avec le nom de l'arrêt
+                circle.bindTooltip(point.stop_name, { direction: 'right' });
 
+                // Ajoutez les coordonnées du point au tableau
+                latLngs.push([point.lat, point.lon]);
+            });
 
+            // Appelez fetchACPMConnections et attendez qu'il soit terminé
+            await fetchACPMConnections();
 
-        <div>
-        <h1 class="ml-12 mt-8 mb-5">Administration de la carte</h1>
-        <div class="flex space-x-2 justify-center">
-            <button class="px-3 py-2 text-xs bg-white border border-gray-400 text-black rounded-full hover:border-green-500 hover:text-green-900" onclick="displayAll()">Réinitialiser la carte</button>
-            <button class="px-2 py-1 text-xs bg-white border border-gray-400  text-black rounded-full  hover:border-green-500 hover:text-green-900" onclick="displayConnexe()">Vérifier connexité</button>
-            <button class="px-2 py-1 text-xs bg-white border border-gray-400  text-black rounded-full  hover:border-green-500 hover:text-green-900" onclick="fetchACPMPoints()">Afficher l'ACPM</button>
-        </div>
-
-
-        <div class="divider mx-8"></div>
-        <h1 class="ml-12 mt-5 mb-5 flex items-center">
-            <img src="metro.svg" alt="Icone Metro" class="h-6 w-6 mr-2">
-            Métro
-        </h1>
-        <div class="grid grid-cols-4 gap-4 px-10">
-            <div class="p-2 border-4 rounded-lg flex items-center justify-center">
-                <img src='svg/ligne1.svg' onclick="fetchStops('ligne1', '#FFBE00')" alt="SVG Description" class="svg-icon"/>
-            </div>
-            <div class="p-2 border-4 rounded-lg flex items-center justify-center">
-                <img src='svg/ligne2.svg' onclick="fetchStops('ligne2', '#0055C8')" alt="SVG Description" class="svg-icon"/>
-            </div>
-            <div class="p-2 border-4 rounded-lg flex items-center justify-center">
-                <img src='svg/ligne3.svg' onclick="fetchStops('ligne3', '#6E6E00')" alt="SVG Description" class="svg-icon"/>
-            </div>
-            <div class="p-2 border-4 rounded-lg flex items-center justify-center">
-                <img src='svg/ligne3bis.svg' onclick="fetchStops('ligne3b', '#6EC4E8')" alt="SVG Description" class="svg-icon"/>
-            </div>
-            <div class="p-2 border-4 rounded-lg flex items-center justify-center">
-                <img src='svg/ligne4.svg' onclick="fetchStops('ligne4', '#A0006E')" alt="SVG Description" class="svg-icon"/>
-            </div>
-            <div class="p-2 border-4 rounded-lg flex items-center justify-center">
-                <img src='svg/ligne5.svg' onclick="fetchStops('ligne5', '#FF7E2E')" alt="SVG Description" class="svg-icon"/>
-            </div>
-            <div class="p-2 border-4 rounded-lg flex items-center justify-center">
-                <img src='svg/ligne6.svg' onclick="fetchStops('ligne6', '#6ECA97')" alt="SVG Description" class="svg-icon"/>
-            </div>
-            <div class="p-2 border-4 rounded-lg flex items-center justify-center">
-                <img src='svg/ligne7.svg' onclick="fetchLigne7()" alt="SVG Description" class="svg-icon"/>
-            </div>
-            <div class="p-2 border-4 rounded-lg flex items-center justify-center">
-                <img src='svg/ligne7bis.svg' onclick="fetchStops('ligne7b', '#6ECA97')" alt="SVG Description" class="svg-icon"/>
-            </div>
-            <div class="p-2 border-4 rounded-lg flex items-center justify-center">
-                <img src='svg/ligne8.svg' onclick="fetchStops('ligne8', '#D282BE')" alt="SVG Description" class="svg-icon"/>
-            </div>
-            <div class="p-2 border-4 rounded-lg flex items-center justify-center">
-                <img src='svg/ligne9.svg' onclick="fetchStops('ligne9', '#B6BD00')" alt="SVG Description" class="svg-icon"/>
-            </div>
-            <div class="p-2 border-4 rounded-lg flex items-center justify-center">
-                <img src='svg/ligne10.svg' onclick=" fetchStops('ligne10', '#C9910D')" alt="SVG Description" class="svg-icon"/>
-            </div>
-            <div class="p-2 border-4 rounded-lg flex items-center justify-center">
-                <img src='svg/ligne11.svg' onclick="fetchStops('ligne11', '#704B1C')" alt="SVG Description" class="svg-icon"/>
-            </div>
-            <div class="p-2 border-4 rounded-lg flex items-center justify-center">
-                <img src='svg/ligne12.svg' onclick="fetchStops('ligne12', '#007852')" alt="SVG Description" class="svg-icon"/>
-            </div>
-            <div class="p-2 border-4 rounded-lg flex items-center justify-center">
-                <img src='svg/ligne13.svg' onclick="fetchStops('ligne13', '#6EC4E8')" alt="SVG Description" class="svg-icon"/>
-            </div>
-            <div class="p-2 border-4 rounded-lg flex items-center justify-center">
-                <img src='svg/ligne14.svg' onclick="fetchStops('ligne14', '#62259D')" alt="SVG Description" class="svg-icon"/>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-    <div id="map" class="relative">
-
-
-    </div><br>
-
-</div>
-<div role="alert" class="alert alert-success absolute bottom-3 left-[41.2vw] z-[1000] w-full max-w-lg text-white hidden opacity-0 transition-opacity duration-500">
-    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-    <span>Le réseau est connexe !</span>
-</div>
-
-
-
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://kit.fontawesome.com/e22cda2001.js" crossorigin="anonymous"></script>
-<script>
-
-    let pointsData = [];
-
-    async function fetchACPMPoints() {
-        // Effacez toutes les couches de la carte
-        map.eachLayer(function(layer) {
-            if (layer instanceof L.Circle || layer instanceof L.Polyline) {
-                map.removeLayer(layer);
-            }
-        });
-
-        // Récupérez les données de l'endpoint
-        const response = await fetch('http://127.0.0.1:8000/acpm/points');
-        pointsData = await response.json();
-
-        // Créez un tableau pour stocker les coordonnées de tous les points
-        let latLngs = [];
-
-        // Parcourez chaque point
-        pointsData.forEach(point => {
-            // Créez un cercle sur la carte à la position lat/lon du point
-            const circle = L.circle([point.lat, point.lon], {
-                color: '#209474',
-                fillColor: '#209474',
-                fillOpacity: 1,
-                radius: 50
-            }).addTo(map);
-
-            // Ajoutez un tooltip au cercle avec le nom de l'arrêt
-            circle.bindTooltip(point.stop_name, {direction: 'right'});
-
-            // Ajoutez les coordonnées du point au tableau
-            latLngs.push([point.lat, point.lon]);
-        });
-
-        // Appelez fetchACPMConnections et attendez qu'il soit terminé
-        await fetchACPMConnections();
-
-        // Ajustez la vue de la carte pour englober tous les points
-        map.fitBounds(latLngs);
-    }
-
-    async function fetchACPMConnections() {
-        // Récupérez les données de l'endpoint
-        const response = await fetch('http://127.0.0.1:8000/acpm');
-        const connections = await response.json();
-
-        // Parcourez chaque connexion
-        connections.forEach(connection => {
-            // Trouvez les deux points correspondants dans les données précédemment récupérées
-            const point1 = pointsData.find(point => point.stop_id === connection[0]);
-            const point2 = pointsData.find(point => point.stop_id === connection[1]);
-
-            // Vérifiez que point1 et point2 ne sont pas undefined avant de créer une ligne
-            if (point1 && point2) {
-                // Créez une ligne entre ces deux points sur la carte
-                L.polyline([[point1.lat, point1.lon], [point2.lat, point2.lon]], {color: '#209474'}).addTo(map);
-            }
-        });
-    }
-    function displayConnexe() {
-        // Sélectionnez la div
-        var alertDiv = document.querySelector('.alert');
-
-        // Affichez la div avec un effet de fondu
-        alertDiv.classList.remove('hidden');
-        setTimeout(function() {
-            alertDiv.classList.remove('opacity-0');
-        }, 10); // un petit délai pour s'assurer que 'hidden' est supprimé avant de commencer la transition
-
-        // Faites disparaître la div après 3 secondes
-        setTimeout(function() {
-            alertDiv.classList.add('opacity-0');
-
-            // Ajoutez 'hidden' après la transition
-            setTimeout(function() {
-                alertDiv.classList.add('hidden');
-            }, 500); // correspond à 'duration-500' dans Tailwind
-        }, 3000);
-    }
-    const inputs = document.querySelectorAll('.input');
-
-    inputs.forEach(input => {
-        input.addEventListener('input', () => {
-            if (input.value.trim() !== '') {
-                input.style.opacity = '0.7';
-            }
-            else {
-                input.style.opacity = '0.2';
-            }
-        });
-    });
-
-    document.querySelector('.theme-controller').addEventListener('change', function(e) {
-        var body = document.body;
-        if (e.target.checked) {
-            body.classList.add('dark-mode');
-        } else {
-            body.classList.remove('dark-mode');
+            // Ajustez la vue de la carte pour englober tous les points
+            map.fitBounds(latLngs);
         }
-        updateMapTheme(e.target.checked ? 'dracula' : 'light');
-    });
-    var map = L.map('map').setView([48.8566, 2.3522], 12);
-    L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: 'Réalisé pour EFREI'
-    }).addTo(map);
 
-    async function fetchStops(line, color) {
-        clearMap();
-        const response = await fetch(`http://localhost:8000/stops/${line}`);
-        const stops = await response.json();
-        const latLngs = [];
+        async function fetchACPMConnections() {
+            // Récupérez les données de l'endpoint
+            const response = await fetch('http://127.0.0.1:8000/acpm');
+            const connections = await response.json();
 
-        stops.forEach(stop => {
-            latLngs.push([stop.lat, stop.lon]);
-            const circle = L.circle([stop.lat, stop.lon], {
-                color: color,
-                fillColor: color,
-                fillOpacity: 1,
-                radius: 50,
-                weight: 6
-            }).addTo(map);
-            circle.bindPopup(`Arrêt: ${stop.stop_name}`);
-            circle.bindTooltip(stop.stop_name, {direction: 'right'});
+            // Parcourez chaque connexion
+            connections.forEach(connection => {
+                // Trouvez les deux points correspondants dans les données précédemment récupérées
+                const point1 = pointsData.find(point => point.stop_id === connection[0]);
+                const point2 = pointsData.find(point => point.stop_id === connection[1]);
+
+                // Vérifiez que point1 et point2 ne sont pas undefined avant de créer une ligne
+                if (point1 && point2) {
+                    // Créez une ligne entre ces deux points sur la carte
+                    L.polyline([[point1.lat, point1.lon], [point2.lat, point2.lon]], { color: '#209474' }).addTo(map);
+                }
+            });
+        }
+        function displayConnexe() {
+            // Sélectionnez la div
+            var alertDiv = document.querySelector('.alert');
+
+            // Affichez la div avec un effet de fondu
+            alertDiv.classList.remove('hidden');
+            setTimeout(function () {
+                alertDiv.classList.remove('opacity-0');
+            }, 10); // un petit délai pour s'assurer que 'hidden' est supprimé avant de commencer la transition
+
+            // Faites disparaître la div après 3 secondes
+            setTimeout(function () {
+                alertDiv.classList.add('opacity-0');
+
+                // Ajoutez 'hidden' après la transition
+                setTimeout(function () {
+                    alertDiv.classList.add('hidden');
+                }, 500); // correspond à 'duration-500' dans Tailwind
+            }, 3000);
+        }
+        const inputs = document.querySelectorAll('.input');
+
+        inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                if (input.value.trim() !== '') {
+                    input.style.opacity = '0.7';
+                }
+                else {
+                    input.style.opacity = '0.2';
+                }
+            });
         });
 
-
-
-        L.polyline(latLngs, {color: color}).addTo(map);
-        map.fitBounds(L.polyline(latLngs).getBounds());
-    }
-
-    function fetchLigne7() {
-        clearMap();
-        fetchStops('ligne7', '#F49FB3');
-        fetchStops('ligne7_2', '#F49FB3');
-    }
-
-    function displayAll() {
-        clearMap();
-        fetchStops('ligne5', '#FF7E2E');
-        fetchStops('ligne7', '#F49FB3');
-        fetchStops('ligne1', '#FFBE00');
-        fetchStops('ligne2', '#0055C8');
-        fetchStops('ligne6', '#6ECA97');
-        fetchStops('ligne3', '#6E6E00');
-        fetchStops('ligne4', '#A0006E');
-        fetchStops('ligne9', '#B6BD00');
-        fetchStops('ligne8', '#D282BE');
-        fetchStops('ligne13', '#6EC4E8');
-        fetchStops('ligne14', '#62259D');
-        fetchStops('ligne7_2', '#F49FB3');
-        fetchStops('ligne11', '#704B1C');
-        fetchStops('ligne12', '#007852');
-        fetchStops('ligne7b', '#6ECA97');
-        fetchStops('ligne3b', '#6EC4E8');
-        fetchStops('ligne10', '#C9910D');
-    }
-
-    function clearMap() {
-        map.eachLayer(function(layer) {
-            if (layer instanceof L.Circle || layer instanceof L.Polyline) {
-                map.removeLayer(layer);
+        document.querySelector('.theme-controller').addEventListener('change', function (e) {
+            var body = document.body;
+            if (e.target.checked) {
+                body.classList.add('dark-mode');
+            } else {
+                body.classList.remove('dark-mode');
             }
+            updateMapTheme(e.target.checked ? 'dracula' : 'light');
         });
-    }
-    displayAll()
+        var map = L.map('map').setView([48.8566, 2.3522], 12);
+        L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: 'Réalisé pour EFREI'
+        }).addTo(map);
 
-    /*document.getElementById('searchForm').addEventListener('submit', function(event) {
-        event.preventDefault();
+        async function fetchStops(line, color) {
+            clearMap();
+            const response = await fetch(`http://localhost:8000/stops/${line}`);
+            const stops = await response.json();
+            const latLngs = [];
 
-        var depart = document.getElementsByName('depart')[0].value;
-        var destination = document.getElementsByName('destination')[0].value;
-
-        document.getElementById('startPoint').textContent = depart;
-        document.getElementById('endPoint').textContent = destination;
-        document.getElementById('itineraireSection').style.display = 'block'; // Rend la section visible
-    });*/
-
-
-
-    // Définition des couleurs par ligne
-    const lineColors = {
-        'ligne1': '#FFBE00',
-        'ligne2': '#0055C8',
-        'ligne3': '#6E6E00',
-        'ligne4': '#A0006E',
-        'ligne5': '#FF7E2E',
-        'ligne6': '#6ECA97',
-        'ligne7': '#F49FB3',
-        'ligne8': '#D282BE',
-        'ligne9': '#B6BD00',
-        'ligne10': '#C9910D',
-        'ligne11': '#704B1C',
-        'ligne12': '#007852',
-        'ligne13': '#6EC4E8',
-        'ligne14': '#62259D',
-        'ligne7_2': '#F49FB3',
-        'ligne7b': '#6ECA97',
-        'ligne3b': '#6EC4E8'
-    };
-
-    document.getElementById('searchForm').addEventListener('submit', async function(event) {
-        event.preventDefault();
-        document.getElementById('stationList').innerHTML = '';
-        var depart = document.getElementsByName('depart')[0].value;
-        var destination = document.getElementsByName('destination')[0].value;
-
-        document.getElementById('startPoint').textContent = "Départ";
-        document.getElementById('endPoint').textContent = "Arrivée";
-        document.getElementById('itineraireSection').style.display = 'block'; // Rend la section visible
-
-        clearMap(); // Efface la carte avant de dessiner un nouvel itinéraire
+            stops.forEach(stop => {
+                latLngs.push([stop.lat, stop.lon]);
+                const circle = L.circle([stop.lat, stop.lon], {
+                    color: color,
+                    fillColor: color,
+                    fillOpacity: 1,
+                    radius: 50,
+                    weight: 6
+                }).addTo(map);
+                circle.bindPopup(`Arrêt: ${stop.stop_name}`);
+                circle.bindTooltip(stop.stop_name, { direction: 'right' });
+            });
 
 
 
+            L.polyline(latLngs, { color: color }).addTo(map);
+            map.fitBounds(L.polyline(latLngs).getBounds());
+        }
+
+        function fetchLigne7() {
+            clearMap();
+            fetchStops('ligne7', '#F49FB3');
+            fetchStops('ligne7_2', '#F49FB3');
+        }
+
+        function displayAll() {
+            clearMap();
+            fetchStops('ligne5', '#FF7E2E');
+            fetchStops('ligne7', '#F49FB3');
+            fetchStops('ligne1', '#FFBE00');
+            fetchStops('ligne2', '#0055C8');
+            fetchStops('ligne6', '#6ECA97');
+            fetchStops('ligne3', '#6E6E00');
+            fetchStops('ligne4', '#A0006E');
+            fetchStops('ligne9', '#B6BD00');
+            fetchStops('ligne8', '#D282BE');
+            fetchStops('ligne13', '#6EC4E8');
+            fetchStops('ligne14', '#62259D');
+            fetchStops('ligne7_2', '#F49FB3');
+            fetchStops('ligne11', '#704B1C');
+            fetchStops('ligne12', '#007852');
+            fetchStops('ligne7b', '#6ECA97');
+            fetchStops('ligne3b', '#6EC4E8');
+            fetchStops('ligne10', '#C9910D');
+        }
+
+        function clearMap() {
+            map.eachLayer(function (layer) {
+                if (layer instanceof L.Circle || layer instanceof L.Polyline) {
+                    map.removeLayer(layer);
+                }
+            });
+        }
+        displayAll()
+
+        /*document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+    
+            var depart = document.getElementsByName('depart')[0].value;
+            var destination = document.getElementsByName('destination')[0].value;
+    
+            document.getElementById('startPoint').textContent = depart;
+            document.getElementById('endPoint').textContent = destination;
+            document.getElementById('itineraireSection').style.display = 'block'; // Rend la section visible
+        });*/
 
 
 
+        // Définition des couleurs par ligne
         const lineColors = {
             'ligne1': '#FFBE00',
             'ligne2': '#0055C8',
@@ -484,183 +465,221 @@
             'ligne12': '#007852',
             'ligne13': '#6EC4E8',
             'ligne14': '#62259D',
-            'ligne7_2': '#F49FB4',
-            'ligne7b': '#6ECA98',
-            'ligne3b': '#6EC4E9'
-        };
-        const lineNames = {
-            '#FFBE00': 'ligne1',
-            '#0055C8': 'ligne2',
-            '#6E6E00': 'ligne3',
-            '#A0006E': 'ligne4',
-            '#FF7E2E': 'ligne5',
-            '#6ECA97': 'ligne6',
-            '#F49FB3': 'ligne7',
-            '#D282BE': 'ligne8',
-            '#B6BD00': 'ligne9',
-            '#C9910D': 'ligne10',
-            '#704B1C': 'ligne11',
-            '#007852': 'ligne12',
-            '#6EC4E8': 'ligne13',
-            '#62259D': 'ligne14',
-            '#F49FB4': 'ligne7',
-            '#6ECA98': 'ligne7bis',
-            '#6EC4E9': 'ligne3bis'
+            'ligne7_2': '#F49FB3',
+            'ligne7b': '#6ECA97',
+            'ligne3b': '#6EC4E8'
         };
 
-        let stations = await fetch('http://127.0.0.1:8000/stations/').then(response => response.json());
+        document.getElementById('searchForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            document.getElementById('stationList').innerHTML = '';
+            var depart = document.getElementsByName('depart')[0].value;
+            var destination = document.getElementsByName('destination')[0].value;
 
-        let startStation = stations.find(station => station.stop_name === depart);
-        let endStation = stations.find(station => station.stop_name === destination);
-        const pathData = await fetch(`http://127.0.0.1:8000/dijkstra/${startStation.id}/${endStation.id}`).then(response => response.json());
-        const path = pathData.path;
+            document.getElementById('startPoint').textContent = "Départ";
+            document.getElementById('endPoint').textContent = "Arrivée";
+            document.getElementById('itineraireSection').style.display = 'block'; // Rend la section visible
 
-        const travelTime = pathData.distance; // 20 km/h => 60 minutes
+            clearMap(); // Efface la carte avant de dessiner un nouvel itinéraire
 
-        // Mettre à jour le temps de trajet
-        const travelTimeElement = document.getElementById('travelTime');
-        travelTimeElement.textContent = `Durée du trajet : ${Math.round(travelTime)} minutes`;
 
-        document.getElementById('itineraireSection').appendChild(travelTimeElement);
 
-        let pathCoordinates = [];
-        let prevIcon = null; // Variable pour stocker l'icône de la station précédente
 
-        path.forEach((id, index) => {
-            let station = stations.find(s => s.id === id);
-            let nextStation = stations.find(s => s.id === path[index + 1]);
-            if (station) {
-                const circle = L.circle([station.lat, station.lon], {
-                    color: 'black',
-                    fillColor: 'white',
-                    fillOpacity: 1,
-                    radius: 50,
-                    weight: 6,
-                    pane: 'markerPane'
-                }).addTo(map);
-                circle.bindTooltip(station.stop_name);
 
-                circle.bindPopup(`Arrêt: ${station.stop_name}`);
-                let listItem = document.createElement('li');
-                let icon = document.createElement('img'); // Créez toujours un nouvel élément img
 
-                if (nextStation) {
+            const lineColors = {
+                'ligne1': '#FFBE00',
+                'ligne2': '#0055C8',
+                'ligne3': '#6E6E00',
+                'ligne4': '#A0006E',
+                'ligne5': '#FF7E2E',
+                'ligne6': '#6ECA97',
+                'ligne7': '#F49FB3',
+                'ligne8': '#D282BE',
+                'ligne9': '#B6BD00',
+                'ligne10': '#C9910D',
+                'ligne11': '#704B1C',
+                'ligne12': '#007852',
+                'ligne13': '#6EC4E8',
+                'ligne14': '#62259D',
+                'ligne7_2': '#F49FB4',
+                'ligne7b': '#6ECA98',
+                'ligne3b': '#6EC4E9'
+            };
+            const lineNames = {
+                '#FFBE00': 'ligne1',
+                '#0055C8': 'ligne2',
+                '#6E6E00': 'ligne3',
+                '#A0006E': 'ligne4',
+                '#FF7E2E': 'ligne5',
+                '#6ECA97': 'ligne6',
+                '#F49FB3': 'ligne7',
+                '#D282BE': 'ligne8',
+                '#B6BD00': 'ligne9',
+                '#C9910D': 'ligne10',
+                '#704B1C': 'ligne11',
+                '#007852': 'ligne12',
+                '#6EC4E8': 'ligne13',
+                '#62259D': 'ligne14',
+                '#F49FB4': 'ligne7',
+                '#6ECA98': 'ligne7bis',
+                '#6EC4E9': 'ligne3bis'
+            };
+
+            let stations = await fetch('http://127.0.0.1:8000/stations/').then(response => response.json());
+
+            let startStation = stations.find(station => station.stop_name === depart);
+            let endStation = stations.find(station => station.stop_name === destination);
+            const pathData = await fetch(`http://127.0.0.1:8000/dijkstra/${startStation.id}/${endStation.id}`).then(response => response.json());
+            const path = pathData.path;
+
+            const travelTime = pathData.distance; // 20 km/h => 60 minutes
+
+            // Mettre à jour le temps de trajet
+            const travelTimeElement = document.getElementById('travelTime');
+            travelTimeElement.textContent = `Durée du trajet : ${Math.round(travelTime)} minutes`;
+
+            document.getElementById('itineraireSection').appendChild(travelTimeElement);
+
+            let pathCoordinates = [];
+            let prevIcon = null; // Variable pour stocker l'icône de la station précédente
+
+            path.forEach((id, index) => {
+                let station = stations.find(s => s.id === id);
+                let nextStation = stations.find(s => s.id === path[index + 1]);
+                if (station) {
+                    const circle = L.circle([station.lat, station.lon], {
+                        color: 'black',
+                        fillColor: 'white',
+                        fillOpacity: 1,
+                        radius: 50,
+                        weight: 6,
+                        pane: 'markerPane'
+                    }).addTo(map);
+                    circle.bindTooltip(station.stop_name);
+
+                    circle.bindPopup(`Arrêt: ${station.stop_name}`);
+                    let listItem = document.createElement('li');
+                    let icon = document.createElement('img'); // Créez toujours un nouvel élément img
+
+                    if (nextStation) {
+                        let lineColor = lineColors[nextStation.line];
+                        if (nextStation && (station.next_stop_id == nextStation.id || station.prev_stop_id == nextStation.id)) {
+                            lineColor = lineColors[station.line];
+                        }
+                        let lineName = lineNames[lineColor];
+
+                        icon.src = `svg/${lineName}.svg`;
+                        icon.alt = lineName;
+                        icon.style.height = '20px';
+                        icon.style.width = '20px';
+                        icon.style.verticalAlign = 'bottom';
+                        icon.style.float = 'right';
+                        icon.style.marginLeft = '30px';
+
+                        listItem.appendChild(document.createTextNode(`${station.stop_name} `));
+                        listItem.appendChild(icon);
+
+                        prevIcon = icon.cloneNode(true);
+
+                        // Sauvegardez l'icône de cette itération pour l'utiliser plus tard si nécessaire
+                    } else if (prevIcon) { // Utiliser l'icône de la station précédente si pas de station suivante
+                        listItem.appendChild(document.createTextNode(`${station.stop_name} `));
+                        listItem.appendChild(prevIcon);
+                    } else {
+                        listItem.textContent = `${station.stop_name} (Pas de station suivante)`;
+                    }
+                    stationList.appendChild(listItem);
+                }
+
+                if (station && index < path.length - 1) {
                     let lineColor = lineColors[nextStation.line];
                     if (nextStation && (station.next_stop_id == nextStation.id || station.prev_stop_id == nextStation.id)) {
                         lineColor = lineColors[station.line];
                     }
-                    let lineName = lineNames[lineColor];
 
-                    icon.src = `svg/${lineName}.svg`;
-                    icon.alt = lineName;
-                    icon.style.height = '20px';
-                    icon.style.width = '20px';
-                    icon.style.verticalAlign = 'bottom';
-                    icon.style.float = 'right';
-                    icon.style.marginLeft = '30px';
-
-                    listItem.appendChild(document.createTextNode(`${station.stop_name} `));
-                    listItem.appendChild(icon);
-
-                    prevIcon = icon.cloneNode(true);
-
-                    // Sauvegardez l'icône de cette itération pour l'utiliser plus tard si nécessaire
-                } else if (prevIcon) { // Utiliser l'icône de la station précédente si pas de station suivante
-                    listItem.appendChild(document.createTextNode(`${station.stop_name} `));
-                    listItem.appendChild(prevIcon);
-                } else {
-                    listItem.textContent = `${station.stop_name} (Pas de station suivante)`;
+                    pathCoordinates.push([station.lat, station.lon]);
+                    if (nextStation) {
+                        L.polyline([[station.lat, station.lon], [nextStation.lat, nextStation.lon]], {
+                            color: lineColor,
+                            weight: 6
+                        }).addTo(map);
+                    }
                 }
-                stationList.appendChild(listItem);
-            }
+            });
 
-            if (station && index < path.length - 1) {
-                let lineColor = lineColors[nextStation.line];
-                if (nextStation && (station.next_stop_id == nextStation.id || station.prev_stop_id == nextStation.id)) {
-                    lineColor = lineColors[station.line];
-                }
 
-                pathCoordinates.push([station.lat, station.lon]);
-                if (nextStation) {
-                    L.polyline([[station.lat, station.lon], [nextStation.lat, nextStation.lon]], {
-                        color: lineColor,
-                        weight: 6
+
+            if (path.length > 0) {
+                let lastStation = stations.find(s => s.id === path[path.length - 1]);
+                if (lastStation) {
+                    L.circle([lastStation.lat, lastStation.lon], {
+                        color: '#000000', // contour noir
+                        fillColor: '#ffffff', // remplissage blanc
+                        fillOpacity: 1,
+                        radius: 50,
+                        weight: 6// ajustez la taille ici
                     }).addTo(map);
                 }
             }
+
+            if (pathCoordinates.length > 0) {
+                map.fitBounds(pathCoordinates);
+            }
         });
 
+        document.getElementById('toggleFont').addEventListener('change', function () {
+            var textElements = document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, a, span, li, input, ul, button');
+            textElements.forEach(function (element) {
+                if (this.checked) {
+                    element.classList.add('font-ca');
+                } else {
+                    element.classList.remove('font-ca');
+                }
+            }, this);
+        });
 
+        var selectedVoice = null;
 
-        if (path.length > 0) {
-            let lastStation = stations.find(s => s.id === path[path.length - 1]);
-            if (lastStation) {
-                L.circle([lastStation.lat, lastStation.lon], {
-                    color: '#000000', // contour noir
-                    fillColor: '#ffffff', // remplissage blanc
-                    fillOpacity: 1,
-                    radius: 50,
-                    weight: 6// ajustez la taille ici
-                }).addTo(map);
-            }
+        function setPreferredVoice() {
+            var voices = speechSynthesis.getVoices();
+            // Cherche une voix en français de Google
+            selectedVoice = voices.find(voice => voice.name.includes('Google') && voice.lang.includes('fr'));
         }
 
-        if (pathCoordinates.length > 0) {
-            map.fitBounds(pathCoordinates);
-        }
-    });
+        window.speechSynthesis.onvoiceschanged = function () {
+            setPreferredVoice();
+        };
 
-    document.getElementById('toggleFont').addEventListener('change', function() {
-        var textElements = document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, a, span, li, input, ul, button');
-        textElements.forEach(function(element) {
-            if (this.checked) {
-                element.classList.add('font-ca');
+        function speakItinerary() {
+            var itineraryItems = document.querySelectorAll("#itineraireSection li");
+            var itineraryText = "Commencez votre trajet à ";
+
+            itineraryItems.forEach(function (item, index) {
+                if (index !== 0 && index !== itineraryItems.length - 1) {
+                    itineraryText += " puis prenez ";
+                }
+                itineraryText += item.textContent;
+            });
+
+            itineraryText += " et vous serez arrivé à destination";
+
+            var msg = new SpeechSynthesisUtterance(itineraryText);
+
+            msg.rate = 1.0; // Augmente la vitesse de lecture
+
+            if (selectedVoice) {
+                msg.voice = selectedVoice;
             } else {
-                element.classList.remove('font-ca');
+                console.log("La voix préférée n'est pas disponible. Utilisation de la voix par défaut.");
             }
-        }, this);
-    });
 
-    var selectedVoice = null;
-
-    function setPreferredVoice() {
-        var voices = speechSynthesis.getVoices();
-        // Cherche une voix en français de Google
-        selectedVoice = voices.find(voice => voice.name.includes('Google') && voice.lang.includes('fr'));
-    }
-
-    window.speechSynthesis.onvoiceschanged = function() {
-        setPreferredVoice();
-    };
-
-    function speakItinerary() {
-        var itineraryItems = document.querySelectorAll("#itineraireSection li");
-        var itineraryText = "Commencez votre trajet à ";
-
-        itineraryItems.forEach(function(item, index) {
-            if (index !== 0 && index !== itineraryItems.length - 1) {
-                itineraryText += " puis prenez ";
-            }
-            itineraryText += item.textContent;
-        });
-
-        itineraryText += " et vous serez arrivé à destination";
-
-        var msg = new SpeechSynthesisUtterance(itineraryText);
-
-        msg.rate = 1.0; // Augmente la vitesse de lecture
-
-        if (selectedVoice) {
-            msg.voice = selectedVoice;
-        } else {
-            console.log("La voix préférée n'est pas disponible. Utilisation de la voix par défaut.");
+            window.speechSynthesis.speak(msg);
         }
 
-        window.speechSynthesis.speak(msg);
-    }
-
-    document.getElementById('speakButton').addEventListener('click', speakItinerary);
-</script>
+        document.getElementById('speakButton').addEventListener('click', speakItinerary);
+    </script>
 
 </body>
+
 </html>
