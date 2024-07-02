@@ -250,6 +250,7 @@
 <script src="https://kit.fontawesome.com/e22cda2001.js" crossorigin="anonymous"></script>
 <script>
 
+    const serverUrl = "https://backend-ot44.onrender.com"
     let pointsData = [];
 
     async function fetchACPMPoints() {
@@ -261,7 +262,7 @@
         });
 
         // Récupérez les données de l'endpoint
-        const response = await fetch('http://127.0.0.1:8000/acpm/points');
+        const response = await fetch(serverUrl+'/acpm/points');
         pointsData = await response.json();
 
         // Créez un tableau pour stocker les coordonnées de tous les points
@@ -293,7 +294,7 @@
 
     async function fetchACPMConnections() {
         // Récupérez les données de l'endpoint
-        const response = await fetch('http://127.0.0.1:8000/acpm');
+        const response = await fetch(serverUrl+'/acpm');
         const connections = await response.json();
 
         // Parcourez chaque connexion
@@ -359,7 +360,7 @@
 
     async function fetchStops(line, color) {
         clearMap();
-        const response = await fetch(`http://localhost:8000/stops/${line}`);
+        const response = await fetch(`${serverUrl}/stops/${line}`);
         const stops = await response.json();
         const latLngs = [];
 
@@ -508,11 +509,11 @@
             '#6EC4E9': 'ligne3bis'
         };
 
-        let stations = await fetch('http://127.0.0.1:8000/stations/').then(response => response.json());
+        let stations = await fetch(`${serverUrl}/stations/`).then(response => response.json());
 
         let startStation = stations.find(station => station.stop_name === depart);
         let endStation = stations.find(station => station.stop_name === destination);
-        const pathData = await fetch(`http://127.0.0.1:8000/dijkstra/${startStation.id}/${endStation.id}`).then(response => response.json());
+        const pathData = await fetch(`${serverUrl}/dijkstra/${startStation.id}/${endStation.id}`).then(response => response.json());
         const path = pathData.path;
 
         const travelTime = pathData.distance; // 20 km/h => 60 minutes
@@ -611,7 +612,7 @@
     });
 
     document.getElementById('toggleFont').addEventListener('change', function() {
-        var textElements = document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, a, span, li, input, ul, button');
+        var textElements = document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, a, span, li, input, ul, button, select');
         textElements.forEach(function(element) {
             if (this.checked) {
                 element.classList.add('font-ca');
